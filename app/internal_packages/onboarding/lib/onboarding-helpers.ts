@@ -5,6 +5,7 @@ import { Account, IdentityStore, MailsyncProcess } from 'mailspring-exports';
 import MailspringProviderSettings from './mailspring-provider-settings.json';
 import MailcoreProviderSettings from './mailcore-provider-settings.json';
 import dns from 'dns';
+import { replace } from 'node-emoji';
 
 export const LOCAL_SERVER_PORT = 12141;
 export const LOCAL_REDIRECT_URI = `http://127.0.0.1:${LOCAL_SERVER_PORT}`;
@@ -53,11 +54,15 @@ function mxRecordsForDomain(domain) {
 }
 
 export async function expandAccountWithCommonSettings(account: Account) {
+  // see: https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration
+
   const domain = account.emailAddress
     .split('@')
     .pop()
     .toLowerCase();
   const mxRecords = await mxRecordsForDomain(domain);
+  console.log('MX', domain, ':', mxRecords);
+
   const populated = account.clone();
 
   const usernameWithFormat = format => {
@@ -66,77 +71,89 @@ export async function expandAccountWithCommonSettings(account: Account) {
     return undefined;
   };
 
-  // find matching template using new Mailcore lookup tables. These match against the
-  // email's domain and the mx records for the domain, which means it will identify that
-  // "foundry376.com" uses Google Apps, for example.
-  const template = Object.values(MailcoreProviderSettings).find(p => {
-    for (const test of p['domain-match'] || []) {
-      if (new RegExp(`^${test}$`).test(domain)) {
-        return true;
-      }
-    }
-    for (const test of p['mx-match'] || []) {
-      const reg = new RegExp(`^${test}$`);
-      if (mxRecords.some(record => reg.test(record))) {
-        return true;
-      }
-    }
-    return false;
-  });
+  const getConfigForDomain = async (url, emailAddress) => {
+    const r = await fetch(url);
+    const doc = new DOMParser().parseFromString(await r.text(), 'application/xml');
+    const imap = doc.querySelector("incomingServer[type='imap']");
+    const smtp = doc.querySelector("outgoingServer[type='smtp']");
 
-  if (template) {
-    console.log(`Using Mailcore Template: ${JSON.stringify(template, null, 2)}`);
-    const imap = (template.servers.imap || [])[0] || ({} as any);
-    const smtp = (template.servers.smtp || [])[0] || ({} as any);
-    const defaults = {
-      imap_host: (imap.hostname || '').replace('{domain}', domain),
-      imap_port: imap.port,
-      imap_username: usernameWithFormat('email'),
+    return {
+      imap_host: imap.getElementsByTagName('hostname')[0].textContent,
+      imap_port: parseInt(imap.getElementsByTagName('port')[0].textContent),
+      imap_username: imap
+        .getElementsByTagName('username')[0]
+        .textContent.replace('%EMAILADDRESS%', usernameWithFormat('email'))
+        .replace('%EMAILLOCALPART%', usernameWithFormat('email-without-domain')),
       imap_password: populated.settings.imap_password,
-      imap_security: imap.starttls ? 'STARTTLS' : imap.ssl ? 'SSL / TLS' : 'none',
+      imap_security:
+        imap.getElementsByTagName('socketType')[0].textContent == 'STARTTLS'
+          ? 'STARTTLS'
+          : 'SSL / TLS',
       imap_allow_insecure_ssl: false,
 
-      smtp_host: (smtp.hostname || '').replace('{domain}', domain),
-      smtp_port: smtp.port,
-      smtp_username: usernameWithFormat('email'),
+      smtp_host: smtp.getElementsByTagName('hostname')[0].textContent,
+      smtp_port: parseInt(smtp.getElementsByTagName('port')[0].textContent),
+      smtp_username: smtp
+        .getElementsByTagName('username')[0]
+        .textContent.replace('%EMAILADDRESS%', usernameWithFormat('email'))
+        .replace('%EMAILLOCALPART%', usernameWithFormat('email-without-domain')),
       smtp_password: populated.settings.smtp_password || populated.settings.imap_password,
-      smtp_security: smtp.starttls ? 'STARTTLS' : smtp.ssl ? 'SSL / TLS' : 'none',
+      smtp_security:
+        smtp.getElementsByTagName('socketType')[0].textContent == 'STARTTLS'
+          ? 'STARTTLS'
+          : 'SSL / TLS',
       smtp_allow_insecure_ssl: false,
     };
-    populated.settings = Object.assign(defaults, populated.settings);
+  };
+
+  const mxDomains = mxRecords.map(x =>
+    x
+      .split('.')
+      .slice(-2)
+      .join('.')
+  );
+
+  let template = {
+    imap_host: `imap.${domain}`,
+    imap_port: 993,
+    imap_username: usernameWithFormat('email'),
+    imap_password: populated.settings.imap_password,
+    imap_security: 'SSL / TLS',
+    imap_allow_insecure_ssl: false,
+
+    smtp_host: `smtp.${domain}`,
+    smtp_port: 587,
+    smtp_username: usernameWithFormat('email'),
+    smtp_password: populated.settings.smtp_password || populated.settings.imap_password,
+    smtp_security: 'STARTTLS',
+    smtp_allow_insecure_ssl: false,
+  };
+
+  const tryUrls = [
+    `https://autoconfig.${domain}/mail/config-v1.1.xml?emailaddress=${account.emailAddress}`,
+    ...mxDomains.map(
+      x => `https://autoconfig.${x}/mail/config-v1.1.xml?emailaddress=${account.emailAddress}`
+    ),
+    `https://autoconfig.thunderbird.net/v1.1/${domain}`,
+    ...mxDomains.map(x => `https://autoconfig.thunderbird.net/v1.1/${x}`),
+  ];
+  for (let url of tryUrls) {
+    try {
+      console.log('trying', url);
+      template = await getConfigForDomain(url, account.emailAddress);
+      break;
+    } catch (e) {
+      continue;
+    }
+  }
+  console.log(template);
+
+  if (template) {
+    console.log(`Using template: ${JSON.stringify(template, null, 2)}`);
+    populated.settings = Object.assign(template, populated.settings);
     return populated;
   }
 
-  // find matching template by domain or provider in the old lookup tables
-  // this matches the acccount type presets ("yahoo") and common domains against
-  // data derived from Thunderbirds ISPDB.
-  let mstemplate =
-    MailspringProviderSettings[domain] || MailspringProviderSettings[account.provider];
-  if (mstemplate) {
-    if (mstemplate.alias) {
-      mstemplate = MailspringProviderSettings[mstemplate.alias];
-    }
-    console.log(`Using Mailspring Template: ${JSON.stringify(mstemplate, null, 2)}`);
-  } else {
-    console.log(`Using Empty Template`);
-    mstemplate = {};
-  }
-
-  const defaults = {
-    imap_host: mstemplate.imap_host,
-    imap_port: mstemplate.imap_port || 993,
-    imap_username: usernameWithFormat(mstemplate.imap_user_format),
-    imap_password: populated.settings.imap_password,
-    imap_security: mstemplate.imap_security || 'SSL / TLS',
-    imap_allow_insecure_ssl: mstemplate.imap_allow_insecure_ssl || false,
-    smtp_host: mstemplate.smtp_host,
-    smtp_port: mstemplate.smtp_port || 587,
-    smtp_username: usernameWithFormat(mstemplate.smtp_user_format),
-    smtp_password: populated.settings.smtp_password || populated.settings.imap_password,
-    smtp_security: mstemplate.smtp_security || 'STARTTLS',
-    smtp_allow_insecure_ssl: mstemplate.smtp_allow_insecure_ssl || false,
-  };
-  populated.settings = Object.assign(defaults, populated.settings);
   return populated;
 }
 

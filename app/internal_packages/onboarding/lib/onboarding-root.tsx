@@ -6,9 +6,7 @@ import PageTopBar from './page-top-bar';
 
 import WelcomePage from './page-welcome';
 import TutorialPage from './page-tutorial';
-import AuthenticatePage from './page-authenticate';
 import AccountChoosePage from './page-account-choose';
-import AccountSettingsPage from './page-account-settings';
 import AccountSettingsPageGmail from './page-account-settings-gmail';
 import AccountSettingsPageIMAP from './page-account-settings-imap';
 import AccountOnboardingSuccess from './page-account-onboarding-success';
@@ -18,9 +16,7 @@ import InitialSubscriptionPage from './page-initial-subscription';
 const PageComponents = {
   welcome: WelcomePage,
   tutorial: TutorialPage,
-  authenticate: AuthenticatePage,
   'account-choose': AccountChoosePage,
-  'account-settings': AccountSettingsPage,
   'account-settings-gmail': AccountSettingsPageGmail,
   'account-settings-imap': AccountSettingsPageIMAP,
   'account-onboarding-success': AccountOnboardingSuccess,

@@ -68,7 +68,7 @@ class KeymapFile {
     }
 
     this._bindings = {};
-    Object.keys(keymaps).forEach(command => {
+    Object.keys(keymaps).forEach((command) => {
       let keystrokesArray = keymaps[command];
       if (!(keystrokesArray instanceof Array)) {
         keystrokesArray = [keystrokesArray];
@@ -206,7 +206,7 @@ export default class KeymapManager {
     file.load();
 
     return new Disposable(() => {
-      this._files = this._files.filter(f => f !== file);
+      this._files = this._files.filter((f) => f !== file);
       this.keymapCacheInvalidated();
     });
   }
@@ -261,7 +261,7 @@ export default class KeymapManager {
     this._emitter.emit('on-did-reload-keymap');
   }
 
-  onDidReloadKeymap = callback => {
+  onDidReloadKeymap = (callback) => {
     return this._emitter.on('on-did-reload-keymap', callback);
   };
 

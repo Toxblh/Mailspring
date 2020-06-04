@@ -9,7 +9,7 @@ const FormField = props => {
     val = props.account[parent][key];
   }
   return (
-    <span>
+    <span style={props.containerStyle}>
       <label htmlFor={props.field}>{props.title}:</label>
       <input
         type={props.type || 'text'}
@@ -31,6 +31,7 @@ FormField.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
   style: PropTypes.object,
+  containerStyle: PropTypes.object,
   submitting: PropTypes.bool,
   onFieldKeyPress: PropTypes.func,
   onFieldChange: PropTypes.func,

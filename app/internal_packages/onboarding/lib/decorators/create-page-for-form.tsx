@@ -109,6 +109,8 @@ const CreatePageForForm = FormComponent => {
         },
         afterSetState
       );
+
+      console.log('account next state is', next);
     };
 
     onSubmit = () => {
@@ -137,30 +139,6 @@ const CreatePageForForm = FormComponent => {
 
     onConnect = (updatedAccount?: Account) => {
       const account = updatedAccount || this.state.account;
-      const providerConfig = AccountProviders.find(({ provider }) => provider === account.provider);
-
-      // warn users about authenticating a Gmail or Google Apps account via IMAP
-      // and allow them to go back
-      if (
-        !didWarnAboutGmailIMAP &&
-        account.provider === 'imap' &&
-        account.settings.imap_host &&
-        account.settings.imap_host.includes('imap.gmail.com')
-      ) {
-        didWarnAboutGmailIMAP = true;
-        const buttonIndex = remote.dialog.showMessageBox({
-          type: 'warning',
-          buttons: [localized('Go Back'), localized('Continue')],
-          message: localized('Are you sure?'),
-          detail: localized(
-            `This looks like a Gmail account! While it's possible to setup an App Password and connect to Gmail via IMAP, Mailspring also supports Google OAuth. Go back and select "Gmail & Google Apps" from the provider screen.`
-          ),
-        });
-        if (buttonIndex === 0) {
-          OnboardingActions.moveToPage('account-choose');
-          return;
-        }
-      }
 
       this.setState({ submitting: true });
 
@@ -190,16 +168,6 @@ const CreatePageForForm = FormComponent => {
             }
           }
 
-          if (providerConfig.note) {
-            const node = document.createElement('div');
-            ReactDOM.render(providerConfig.note, node);
-            let note = node.innerText;
-            const link = node.querySelector('a');
-            if (link) {
-              note += '\n' + link.getAttribute('href');
-            }
-            err.rawLog = note + '\n\n' + err.rawLog;
-          }
           this.setState({
             errorMessage: err.message,
             errorStatusCode: err.statusCode,
@@ -283,33 +251,16 @@ const CreatePageForForm = FormComponent => {
 
     render() {
       const { account, errorMessage, errorFieldNames, errorLog, submitting } = this.state;
-      const providerConfig = AccountProviders.find(({ provider }) => provider === account.provider);
-
-      if (!providerConfig) {
-        throw new Error(`Cannot find account provider ${account.provider}`);
-      }
 
       const hideTitle = errorMessage && errorMessage.length > 120;
 
       return (
         <div className={`page account-setup ${FormComponent.displayName}`}>
-          <div className="logo-container">
-            <RetinaImg
-              style={{ backgroundColor: providerConfig.color, borderRadius: 44 }}
-              name={providerConfig.headerIcon}
-              mode={RetinaImg.Mode.ContentPreserve}
-              className="logo"
-            />
-          </div>
-          {hideTitle ? (
-            <div style={{ height: 20 }} />
-          ) : (
-            <h2>{FormComponent.titleLabel(providerConfig)}</h2>
-          )}
+          {hideTitle ? <div style={{ height: 20 }} /> : <h2>{FormComponent.titleLabel(null)}</h2>}
           <FormErrorMessage
             log={errorLog}
             message={errorMessage}
-            empty={FormComponent.subtitleLabel(providerConfig)}
+            empty={FormComponent.subtitleLabel(null)}
           />
           {this._renderCredentialsNote()}
           <FormComponent

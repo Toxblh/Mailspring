@@ -28,11 +28,7 @@ class AddContactToolbarWithData extends React.Component<AddContactToolbarProps> 
 
   render() {
     const { editing, perspective } = this.props;
-    const enabled =
-      'accountId' in perspective &&
-      editing === false &&
-      perspective.accountId &&
-      perspective.type !== 'found-in-mail';
+    const enabled = 'accountId' in perspective && editing === false && perspective.accountId;
     const acct = 'accountId' in perspective && AccountStore.accountForId(perspective.accountId);
 
     return (
@@ -60,9 +56,7 @@ class AddContactToolbarWithData extends React.Component<AddContactToolbarProps> 
   }
 }
 
-export const AddContactToolbar: React.FunctionComponent<
-  AddContactToolbarProps
-> = ListensToFluxStore(
+export const AddContactToolbar: React.FunctionComponent<AddContactToolbarProps> = ListensToFluxStore(
   ({ listSource, editing, perspective }) => (
     <AddContactToolbarWithData editing={editing} perspective={perspective} />
   ),

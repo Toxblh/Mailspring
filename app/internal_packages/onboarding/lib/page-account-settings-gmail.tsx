@@ -17,7 +17,7 @@ export default class AccountSettingsPageGmail extends React.Component<{ account:
   }
 
   render() {
-    const providerConfig = AccountProviders.find(a => a.provider === this.props.account.provider);
+    const providerConfig = AccountProviders.find(a => a.provider === 'gmail');
     const { headerIcon } = providerConfig;
     const goBack = () => OnboardingActions.moveToPreviousPage();
 

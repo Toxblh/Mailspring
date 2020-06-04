@@ -36,9 +36,9 @@ class OnboardingStore extends MailspringStore {
       if (this._account.provider === 'gmail') {
         this._pageStack = ['account-choose', 'account-settings-gmail'];
       } else if (this._account.provider === 'imap') {
-        this._pageStack = ['account-choose', 'account-settings', 'account-settings-imap'];
+        this._pageStack = ['account-choose', 'account-settings-imap'];
       } else {
-        this._pageStack = ['account-choose', 'account-settings'];
+        this._pageStack = ['account-choose', 'account-settings-imap'];
       }
     } else if (addingAccount) {
       // Adding a new, unknown account
@@ -112,7 +112,7 @@ class OnboardingStore extends MailspringStore {
     setTimeout(() => {
       if (isFirstAccount) {
         const next = this._account.clone();
-        next.name = `${json.firstName || ''} ${json.lastName || ''}`;
+        next.name = ``;
         next.emailAddress = json.emailAddress;
         this._onSetAccount(next);
         OnboardingActions.moveToPage('account-choose');

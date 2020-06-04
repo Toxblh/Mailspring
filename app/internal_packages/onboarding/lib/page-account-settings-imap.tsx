@@ -10,7 +10,7 @@ interface AccountIMAPSettingsFormProps {
   account: Account;
   errorFieldNames: string[];
   submitting: boolean;
-  onConnect: () => void;
+  onConnect: (account: Account) => void;
   onFieldChange: (
     event: { target: { id: string; value: any; type?: string; checked?: boolean } },
     opts?: { afterSetState: () => void }
@@ -136,6 +136,10 @@ class AccountIMAPSettingsForm extends React.Component<AccountIMAPSettingsFormPro
         )}
       </span>
     );
+  }
+
+  async submit() {
+    this.props.onConnect(this.props.account);
   }
 
   renderSecurityDropdown(protocol) {

@@ -15,19 +15,19 @@ const Steps = [
     xDot: 93.5,
     yDot: 5.4,
   },
-  {
-    seen: false,
-    id: 'activity',
-    title: localized('Track opens and clicks'),
-    image: 'feature-activity@2x.png',
-    description: localized(
-      'With activity tracking, you’ll know as soon as someone reads your message. Sending to a group? Mailspring shows you which recipients opened your email so you can follow up with precision.'
-    ),
-    x: 12.8,
-    y: 1,
-    xDot: 15,
-    yDot: 5.1,
-  },
+  // {
+  //   seen: false,
+  //   id: 'activity',
+  //   title: localized('Track opens and clicks'),
+  //   image: 'feature-activity@2x.png',
+  //   description: localized(
+  //     'With activity tracking, you’ll know as soon as someone reads your message. Sending to a group? Mailspring shows you which recipients opened your email so you can follow up with precision.'
+  //   ),
+  //   x: 12.8,
+  //   y: 1,
+  //   xDot: 15,
+  //   yDot: 5.1,
+  // },
   {
     seen: false,
     id: 'snooze',
@@ -41,17 +41,18 @@ const Steps = [
     xDot: 10,
     yDot: 25.9,
   },
-  // {
-  //   seen: false,
-  //   id: 'composer',
-  //   title: 'Eliminate hacky extensions',
-  //   image: 'feature-composer@2x.png',
-  //   description: "Embed calendar invitations, propose meeting times, use quick reply templates, send mass emails with mail merge, and more—all directly from Mailspring’s powerful composer.",
-  //   x: 60.95,
-  //   y: 66,
-  //   xDot: 60.3,
-  //   yDot: 65.0,
-  // },
+  {
+    seen: false,
+    id: 'composer',
+    title: 'Add powerful extensions',
+    image: 'feature-composer@2x.png',
+    description:
+      'Embed calendar invitations, propose meeting times, use quick reply templates, send mass emails with mail merge, and more—all directly from Mailspring’s powerful composer.',
+    x: 60.95,
+    y: 66,
+    xDot: 60.3,
+    yDot: 65.0,
+  },
 ];
 
 export default class TutorialPage extends React.Component<
@@ -97,7 +98,69 @@ export default class TutorialPage extends React.Component<
     if (nextItem) {
       this.setState({ current: nextItem, seen: nextSeen });
     } else {
-      OnboardingActions.moveToPage('authenticate');
+      OnboardingActions.identityJSONReceived({
+        id: 'ffffffff-ffff-ffff-ffff-ffffffffffff',
+        token: 'ffffffff-ffff-ffff-ffff-fffffffffff1',
+        firstName: '',
+        lastName: '',
+        emailAddress: '',
+        object: 'identity',
+        createdAt: '2020-01-24T18:41:25.000Z',
+        stripePlan: 'Basic',
+        stripePlanEffective: 'Basic',
+        stripeCustomerId: 'cus_xxxxxxxxxxxx',
+        stripePeriodEnd: null,
+        featureUsage: {
+          snooze: {
+            quota: 15,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          'send-later': {
+            quota: 5,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          'thread-sharing': {
+            quota: 3,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          'link-tracking': {
+            quota: 5,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          'open-tracking': {
+            quota: 5,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          'contact-profiles': {
+            quota: 3,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          'send-reminders': {
+            quota: 5,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+          translation: {
+            quota: 50,
+            period: 'weekly',
+            usedInPeriod: 0,
+            featureLimitName: 'basic-limit',
+          },
+        },
+      });
     }
   };
 

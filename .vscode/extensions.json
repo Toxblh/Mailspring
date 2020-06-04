@@ -1,0 +1,5 @@
+// https://go.microsoft.com/fwlink/?LinkId=827846
+{
+  "recommendations": ["msjsdiag.debugger-for-chrome"],
+  "unwantedRecommendations": []
+}
