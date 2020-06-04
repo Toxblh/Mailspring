@@ -1,6 +1,6 @@
 # 💌 Mailspring Free build
 
-[![Travis Status](https://img.shields.io/travis/com/Toxblh/Mailspring?label=travis)](https://travis-ci.com/Toxblh/Mailspring)
+[![Travis Status](https://travis-ci.org/Toxblh/Mailspring.svg?branch=master)](https://travis-ci.org/Toxblh/Mailspring)
 
 Mailspring is a email client that is fast, free and beautiful. This Libre build comes with no telemetry at all, and is still filled with powerful features you will love, like Unified Inbox, Snooze, Send Later, Mail Rules, Templates and more!
 
