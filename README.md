@@ -2,15 +2,15 @@
 
 [![Travis Status](https://travis-ci.org/Toxblh/Mailspring.svg?branch=master)](https://travis-ci.org/Toxblh/Mailspring)
 
-Mailspring is a email client that is fast, free and beautiful. This Libre build comes with no telemetry at all, and is still filled with powerful features you will love, like Unified Inbox, Snooze, Send Later, Mail Rules, Templates and more!
+Mailspring is a email client that is fast, free and beautiful. This Free build comes with no telemetry at all, and is still filled with powerful features you will love, like Unified Inbox, Snooze, Send Later, Mail Rules, Templates and more!
 
 ![Mailspring Screenshot](https://github.com/Toxblh/Mailspring/raw/master/screenshots/hero_graphic_mac%402x.png)
 
 ## Download Mailspring
 
-N. B. Please note that **Mailspring Libre build isn't fully open source right now**: the sync engine, MailSync, is [proprietary](https://github.com/Toxblh/Mailspring/blob/master/LICENSE-mailsync.md), and while we're working on replacing it, it probably won't happen anytime soon. By downloading Mailspring Libre build, you accept the MailSync license (which doesn't affect you as a regular user).
+N. B. Please note that **Mailspring Free build isn't fully open source right now**: the sync engine, MailSync, is [proprietary](https://github.com/Toxblh/Mailspring/blob/master/LICENSE-mailsync.md), and while we're working on replacing it, it probably won't happen anytime soon. By downloading Mailspring Free build, you accept the MailSync license (which doesn't affect you as a regular user).
 
-You can download compiled versions of Mailspring Libre build for Linux (deb and rpm – Windows and macOS support coming soon!) from [GitHub Releases](https://github.com/Toxblh/Mailspring/releases/). There's also an [AUR package (soon)]().
+You can download compiled versions of Mailspring Free build for Linux (deb and rpm – Windows and macOS support coming soon!) from [GitHub Releases](https://github.com/Toxblh/Mailspring/releases/). There's also an [AUR package (soon)]().
 
 ## Contributing
 
@@ -38,6 +38,6 @@ If you are updating an existing Nylas theme for Mailspring here is a [step by st
 
 Mailspring 1.5.0 and above support localization. If you're a fluent speaker of another language, we'd love your help improving translations. Check out the [LOCALIZATION](https://github.com/Toxblh/Mailspring/blob/master/LOCALIZATION.md) guide for more information.
 
-### Contributing to Mailspring Libre build
+### Contributing to Mailspring Free build
 
 Pull requests are always welcome - check out [CONTRIBUTING](https://github.com/Toxblh/Mailspring/blob/master/CONTRIBUTING.md) for more information about setting up the development environment, running tests locally, and submitting pull requests.
