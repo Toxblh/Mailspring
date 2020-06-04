@@ -1,16 +1,16 @@
-# 💌 Mailspring Libre build
+# 💌 Mailspring Free build
 
-[![Travis Status](https://img.shields.io/travis/com/notpushkin/Mailspring-Libre?label=travis)](https://travis-ci.com/notpushkin/Mailspring-Libre)
+[![Travis Status](https://img.shields.io/travis/com/Toxblh/Mailspring?label=travis)](https://travis-ci.com/Toxblh/Mailspring)
 
 Mailspring is a email client that is fast, free and beautiful. This Libre build comes with no telemetry at all, and is still filled with powerful features you will love, like Unified Inbox, Snooze, Send Later, Mail Rules, Templates and more!
 
-![Mailspring Screenshot](https://github.com/Foundry376/Mailspring/raw/master/screenshots/hero_graphic_mac%402x.png)
+![Mailspring Screenshot](https://github.com/Toxblh/Mailspring/raw/master/screenshots/hero_graphic_mac%402x.png)
 
 ## Download Mailspring
 
-N. B. Please note that **Mailspring Libre build isn't fully open source right now**: the sync engine, MailSync, is [proprietary](https://github.com/notpushkin/Mailspring-Libre/blob/master/LICENSE-mailsync.md), and while we're working on replacing it, it probably won't happen anytime soon. By downloading Mailspring Libre build, you accept the MailSync license (which doesn't affect you as a regular user).
+N. B. Please note that **Mailspring Libre build isn't fully open source right now**: the sync engine, MailSync, is [proprietary](https://github.com/Toxblh/Mailspring/blob/master/LICENSE-mailsync.md), and while we're working on replacing it, it probably won't happen anytime soon. By downloading Mailspring Libre build, you accept the MailSync license (which doesn't affect you as a regular user).
 
-You can download compiled versions of Mailspring Libre build for Linux (deb and rpm – Windows and macOS support coming soon!) from [GitHub Releases](https://github.com/notpushkin/Mailspring-Libre/releases/). There's also an [AUR package](https://aur.archlinux.org/packages/mailspring-libre/) maintained by [@Panzki](https://github.com/Panzki) (thanks!). Unstable releases are [available on Travis](https://github.com/notpushkin/Mailspring-Libre/issues/1#issuecomment-581483378).
+You can download compiled versions of Mailspring Libre build for Linux (deb and rpm – Windows and macOS support coming soon!) from [GitHub Releases](https://github.com/Toxblh/Mailspring/releases/). There's also an [AUR package (soon)]().
 
 ## Contributing
 
@@ -36,8 +36,8 @@ If you are updating an existing Nylas theme for Mailspring here is a [step by st
 
 ### Localizing / Translating
 
-Mailspring 1.5.0 and above support localization. If you're a fluent speaker of another language, we'd love your help improving translations. Check out the [LOCALIZATION](https://github.com/notpushkin/Mailspring-Libre/blob/master/LOCALIZATION.md) guide for more information.
+Mailspring 1.5.0 and above support localization. If you're a fluent speaker of another language, we'd love your help improving translations. Check out the [LOCALIZATION](https://github.com/Toxblh/Mailspring/blob/master/LOCALIZATION.md) guide for more information.
 
 ### Contributing to Mailspring Libre build
 
-Pull requests are always welcome - check out [CONTRIBUTING](https://github.com/notpushkin/Mailspring-Libre/blob/master/CONTRIBUTING.md) for more information about setting up the development environment, running tests locally, and submitting pull requests.
+Pull requests are always welcome - check out [CONTRIBUTING](https://github.com/Toxblh/Mailspring/blob/master/CONTRIBUTING.md) for more information about setting up the development environment, running tests locally, and submitting pull requests.
